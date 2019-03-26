@@ -46,11 +46,11 @@ for i in range(0, N):
         titles_array.append(ti1)
 
 parent = os.path.dirname(os.path.realpath(__file__))
-sys.path.append(parent+"C:\\Users\\Samy Abud Yoshima\\Anaconda3\\Lib\\MITIE-master\\mitielib")
+sys.path.append(parent+"C:\\Users\\____\\MITIE-master\\mitielib")
 from mitie import *
 from collections import defaultdict
 print("loading NER model...")
-ner = named_entity_extractor("C:\\Users\\Samy Abud Yoshima\\Anaconda3\\Lib\\MITIE-master\\MITIE-models\\english\\ner_model.dat")
+ner = named_entity_extractor("C:\\Users\\____\\MITIE-master\\MITIE-models\\english\\ner_model.dat")
 print("\nTags output by this NER model:", ner.get_possible_ner_tags())
 #entity subset array
 entity_text_array = []
