@@ -39,7 +39,7 @@ def category(source, m):
 
 def getDailyNews():
     sources = getSources()
-    key ='7a3123e37aba476bbb4b512f0d9472f7'
+    key ='____________________' get your key
     url = 'https://newsapi.org/v1/articles?source={0}&sortBy={1}&apiKey={2}'
     responses = []
     for i, source in tqdm_notebook(enumerate(sources), total=len(sources)):
@@ -96,7 +96,7 @@ topic_list = pd.DataFrame({'topics':topics})
 
 # 1)Filename: title-<article_numer>.txt, example: title-1.txt
 for i in range(0,len(title_list)):
-    with io.open("C:\\Users\\Samy Abud Yoshima\\Anaconda3\\Library\\courses\\MIT XPRO\\DataScience+BigData\\Module 1 - Clustering\\CaseSt 1.2.2\\title-" + str(i) + ".txt", 'w', encoding='utf-8') as f:
+    with io.open("C:\\Users\\title-" + str(i) + ".txt", 'w', encoding='utf-8') as f:
         title = title_list.iat[int(i),0]
         f.write(title)
         f.write('\n')
@@ -104,7 +104,7 @@ for i in range(0,len(title_list)):
 #Contents: The actual “topic” (section or sub-section) under which the news story was classified on the hosting website.
 #tag each article with the actual “topic”: assigning the name of the hierarchical identifier for the news story on the website it is hosted on.
 for i in range(0,len(topic_list)):
-    with io.open("C:\\Users\\Samy Abud Yoshima\\Anaconda3\\Library\\courses\\MIT XPRO\\DataScience+BigData\\Module 1 - Clustering\\CaseSt 1.2.2\\topic-" + str(i) + ".txt", 'w', encoding='utf-8') as f:
+    with io.open("C:\\Users\\topic-" + str(i) + ".txt", 'w', encoding='utf-8') as f:
         topic = topic_list.iat[int(i),0]
         f.write(topic)
         f.write('\n')
@@ -112,7 +112,7 @@ for i in range(0,len(topic_list)):
 #Contents: The contents of the news story.
 g = Goose()
 for i in range(0,len(url_list)):
-    with io.open("C:\\Users\\Samy Abud Yoshima\\Anaconda3\\Library\\courses\\MIT XPRO\\DataScience+BigData\\Module 1 - Clustering\\CaseSt 1.2.2\\article-" + str(i) + ".txt", 'w', encoding='utf-8') as f:
+    with io.open("C:\\Users\\article-" + str(i) + ".txt", 'w', encoding='utf-8') as f:
         url= url_list.iat[int(i),0]
         article = g.extract(url=url)
         article = article.cleaned_text
