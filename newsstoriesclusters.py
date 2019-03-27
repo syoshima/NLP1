@@ -128,13 +128,12 @@ std= data.std()
 datan = ((data - mea) / std)
 cov = np.cov(datan)
 eig_val, eig_vec = np.linalg.eig(cov) # eigenvectors and eigenvalues from the cov matrix
-#eigvec = [eig_vec[:,i].reshape(1,len(corpus)).T for i in range(len(eig_val))]
 eig_pairs = [(np.abs(eig_val[i]), eig_vec[:,i]) for i in range(len(eig_val))]# Make a list of (eigenvalue, eigenvector) tuples
 eig_pairs.sort(key=lambda x: x[0], reverse=True)
 matrix_w = np.hstack((eig_pairs[1][1].reshape(len(corpus),1), eig_pairs[2][1].reshape(len(corpus),1)))
-Y = matrix_w.T.dot(data)
+Y = matrix_w.T.dot(datan)
 
-fig=plt.figure(2)
+fig=plt.figure(3)
 n_cl=n_clusters
 X =  pd.DataFrame(data = Y.T, columns = ['PC2', 'PC3'])
 kmeans = KMeans(n_clusters=n_cl, random_state=0)
