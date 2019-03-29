@@ -143,7 +143,8 @@ mea = np.mean(data3,axis=0)
 std = np.std(data3,axis=0)
 data4 = ((data3 - mea) / std)
 #datan = np.cov(data3)
-datan = np.cov(data4)
+#datan = np.cov(data4)
+datan = data3
 #compute 
 eig_val, eig_vec = np.linalg.eig(datan) # eigenvectors and eigenvalues from the cov matrix
 eig_pairs = [(np.abs(eig_val[i]), eig_vec[:,i].astype(np.float64)) for i in range(len(eig_val))]# Make a list of (eigenvalue, eigenvector) tuples
