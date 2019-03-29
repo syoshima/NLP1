@@ -144,13 +144,14 @@ std = np.std(data3,axis=0)
 data4 = ((data3 - mea) / std)
 #datan = np.cov(data3)
 #datan = np.cov(data4)
-datan = data3
+#datan = data3
+datan = data2
 #compute 
 eig_val, eig_vec = np.linalg.eig(datan) # eigenvectors and eigenvalues from the cov matrix
 eig_pairs = [(np.abs(eig_val[i]), eig_vec[:,i].astype(np.float64)) for i in range(len(eig_val))]# Make a list of (eigenvalue, eigenvector) tuples
 eig_pairs.sort(key=lambda x: x[0],reverse=False)
 matrix_w = np.hstack((eig_pairs[1][1].reshape(len(datan),1), eig_pairs[2][1].reshape(len(datan),1)))
-Y = matrix_w.T.dot(data3.T)
+Y = matrix_w.T.dot(data2.T)
 TOPICS = np.unique(topics_array)
 fig=plt.figure(3)
 n_cl=n_clusters
