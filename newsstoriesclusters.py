@@ -137,21 +137,34 @@ plt.show()
 
 from scipy.sparse import csr_matrix
 from scipy.sparse import csgraph
+from scipy.sparse.linalg import eigs, eigsh
+
 data2 =csr_matrix(affinity).toarray()
 data3 = csgraph.laplacian(data2, normed=False)
 mea = np.mean(data3,axis=0)
 std = np.std(data3,axis=0)
 data4 = ((data3 - mea) / std)
-#datan = np.cov(data3)
-#datan = np.cov(data4)
-#datan = data3
+
 datan = data2
 #compute 
 eig_val, eig_vec = np.linalg.eig(datan) # eigenvectors and eigenvalues from the cov matrix
-eig_pairs = [(np.abs(eig_val[i]), eig_vec[:,i].astype(np.float64)) for i in range(len(eig_val))]# Make a list of (eigenvalue, eigenvector) tuples
+eig_pairs = [(np.abs(eig_val[i]), eig_vec[:,i]) for i in range(len(eig_val))]# Make a list of (eigenvalue, eigenvector) tuples
 eig_pairs.sort(key=lambda x: x[0],reverse=False)
 matrix_w = np.hstack((eig_pairs[1][1].reshape(len(datan),1), eig_pairs[2][1].reshape(len(datan),1)))
-Y = matrix_w.T.dot(data2.T)
+Y = matrix_w.T.dot(data2.T).astype(np.float64)
+"""
+evals_sml, evecs_sml = eigsh(datan, 3, which='SM', tol=1E-2)
+esml_pairs = [(np.abs(evals_sml[i]), evecs_sml[:,i]) for i in range(len(evals_sml))]# Make a list of (eigenvalue, eigenvector) tuples
+esml_pairs.sort(key=lambda x: x[0],reverse=False)
+matrix_wsml = np.hstack((esml_pairs[1][1].reshape(len(datan),1), esml_pairs[2][1].reshape(len(datan),1)))
+Y1 = matrix_wsml.T.dot(data2.T).astype(np.float64)
+
+evals_lrg, evecs_lrg = eigsh(datan, 3, which='LM')
+elrg_pairs = [(np.abs(evals_lrg[i]), evecs_lrg[:,i]) for i in range(len(evals_lrg))]# Make a list of (eigenvalue, eigenvector) tuples
+elrg_pairs.sort(key=lambda x: x[0],reverse=False)
+matrix_wlrg = np.hstack((elrg_pairs[1][1].reshape(len(datan),1), elrg_pairs[2][1].reshape(len(datan),1)))
+Y2 = matrix_wlrg.T.dot(data2.T).astype(np.float64)
+"""
 TOPICS = np.unique(topics_array)
 fig=plt.figure(3)
 n_cl=n_clusters
@@ -160,16 +173,17 @@ kmeans = KMeans(n_clusters=n_cl, random_state=(n_cl-n_cl))
 kmeans.fit(X)
 y_kmeans = kmeans.predict(X)
 newcmp = ListedColormap(cnames)
-plt.scatter(X['PC2'], X['PC3'], c=y_kmeans, s=10, cmap=newcmp)
+k=(1/abs(X.min()))[1]
+plt.scatter(k*X['PC2'], k*X['PC3'], c=y_kmeans, s=10, cmap=newcmp)
 centers = kmeans.cluster_centers_
-plt.scatter(centers[:, 0], centers[:, 1], c='black', s=50, alpha=1);
-for label, x, y in zip(TOPICS, centers[:, 0], centers[:, 1]):
+plt.scatter(k*centers[:, 0], k*centers[:, 1], c='black', s=50, alpha=1);
+for label, x, y in zip(TOPICS, k*centers[:, 0], k*centers[:, 1]):
     plt.annotate(label,xy=(x, y),xytext=(20, 20),
         textcoords='offset points', ha='center', va='bottom',
         bbox=dict(boxstyle='round,pad=0.2', fc='yellow', alpha=0.25),
         arrowprops=dict(arrowstyle = '->', connectionstyle='arc3,rad=0'))
-#plt.xlim([-100, 100])
-#plt.ylim([-100 ,100])
+#plt.xlim([-10, 10])
+#plt.ylim([-10 ,10])
 plt.xlabel('PC2')
 plt.ylabel('PC3')
 plt.title('News Topics: Spectral Clustering and K-means')
@@ -199,8 +213,3 @@ ax.set_title('K-means prediction: news per Topic')
 ax.grid(True)
 fig.savefig("model eval1.png")   
 plt.show()
-
-
-
-
-
